@@ -19,6 +19,7 @@ defmodule GSS.Registry do
   @type state :: map()
 
   @auth_scope "https://www.googleapis.com/auth/spreadsheets"
+  @service_account_email Application.get_env(:elixir_google_spreadsheets, :client)[:service_account_email]
 
   @spec start_link() :: {:ok, pid}
   def start_link do
@@ -114,7 +115,7 @@ defmodule GSS.Registry do
 
   @spec refresh_token() :: map()
   defp refresh_token do
-    {:ok, token} = Goth.Token.for_scope(@auth_scope)
+    {:ok, token} = Goth.Token.for_scope({@service_account_email, @auth_scope})
     token
   end
 
